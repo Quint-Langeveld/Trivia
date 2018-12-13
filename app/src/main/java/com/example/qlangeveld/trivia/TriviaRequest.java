@@ -22,7 +22,7 @@ public class TriviaRequest implements Response.Listener<JSONObject>, Response.Er
 
     private Context myContext;
     private Callback activity;
-    private String myUrl;
+    private ArrayList<TriviaQuestion> ArrayListTriviaQuestions = new ArrayList<>();
 
     public interface Callback {
         void gotTrivia(ArrayList<TriviaQuestion> menu);
@@ -46,7 +46,8 @@ public class TriviaRequest implements Response.Listener<JSONObject>, Response.Er
 
     @Override
     public void onErrorResponse(VolleyError error) {
-
+        String message = error.getMessage();
+        activity.gotTriviaError(message);
     }
 
     @Override
@@ -70,16 +71,37 @@ public class TriviaRequest implements Response.Listener<JSONObject>, Response.Er
                 String category = newTriviaQuestion.getString("category");
                 String type = newTriviaQuestion.getString("type");
                 String difficulty = newTriviaQuestion.getString("difficulty");
-                String
+                String question = newTriviaQuestion.getString("question");
+                String correct_answer = newTriviaQuestion.getString("correct_answer");
 
+                ArrayList<String> incorrect_answers = new ArrayList<>();
 
+                // and collect the incorrect answers
+                try {
+                    JSONArray incorrectAnswerArray;
+                    incorrectAnswerArray = newTriviaQuestion.getJSONArray("incorrect_answers");
+
+                    incorrect_answers = new ArrayList<>();
+                    for (int j=0; j<incorrectAnswerArray.length(); j++) {
+                        String incorrect_answer = incorrectAnswerArray.getString(j);
+                        incorrect_answers.add(incorrect_answer);
+                    }
+                }
+                catch (JSONException e) {
+                    String message = e.getMessage();
+                    activity.gotTriviaError(message);
+                }
+
+                // add a new TriviaQuestion to the ArrayListTriviaQuestions
+                TriviaQuestion currentTriviaQuestion = new TriviaQuestion(category, difficulty, type, question, correct_answer, incorrect_answers);
+                ArrayListTriviaQuestions.add(currentTriviaQuestion);
             }
             catch (JSONException e) {
                 String message = e.getMessage();
                 activity.gotTriviaError(message);
             }
-
         }
+        activity.gotTrivia(ArrayListTriviaQuestions);
     }
 }
 

@@ -9,13 +9,17 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-public class StartActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+import javax.security.auth.callback.Callback;
+
+public class StartActivity extends AppCompatActivity implements TriviaRequest.Callback {
 
     private String amountOfQuestions = "10";
     private String difficulty;
     private String Type;
     private TriviaRequest triviaRequest;
-
+    private ArrayList<TriviaQuestion> ArrayListTriviaQuestions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +30,19 @@ public class StartActivity extends AppCompatActivity {
         seekBar.setOnSeekBarChangeListener(new SeekBarClickListener());
     }
 
+    @Override
+    public void gotTrivia(ArrayList<TriviaQuestion> triviaQuestions) {
+        this.ArrayListTriviaQuestions = triviaQuestions;
+
+        Intent intent = new Intent(StartActivity.this, TriviaActivity.class);
+        intent.putExtra("TriviaQuestions", ArrayListTriviaQuestions);
+        startActivity(intent);
+    }
+
+    @Override
+    public void gotTriviaError(String message) {
+
+    }
 
     public void onDifficultyClicked(View view) {
         boolean checked = ((RadioButton) view).isChecked();
@@ -115,12 +132,7 @@ public class StartActivity extends AppCompatActivity {
         triviaRequest = new TriviaRequest(this);
         triviaRequest.getTrivia(this, finalUrl);
 
-        Intent intent = new Intent(StartActivity.this, TriviaActivity.class);
-        intent.putExtra("url", finalUrl);
-        startActivity(intent);
+
     }
-
-
-
 
 }
