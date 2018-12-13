@@ -1,13 +1,11 @@
 package com.example.qlangeveld.trivia;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -16,6 +14,8 @@ public class StartActivity extends AppCompatActivity {
     private String amountOfQuestions = "10";
     private String difficulty;
     private String Type;
+    private TriviaRequest triviaRequest;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,10 +112,15 @@ public class StartActivity extends AppCompatActivity {
             finalUrl = finalUrl + "&type=" + Type;
         }
 
+        triviaRequest = new TriviaRequest(this);
+        triviaRequest.getTrivia(this, finalUrl);
+
         Intent intent = new Intent(StartActivity.this, TriviaActivity.class);
         intent.putExtra("url", finalUrl);
         startActivity(intent);
     }
+
+
 
 
 }
