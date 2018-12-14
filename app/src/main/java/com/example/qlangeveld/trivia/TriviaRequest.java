@@ -95,12 +95,15 @@ public class TriviaRequest implements Response.Listener<JSONObject>, Response.Er
                 // add a new TriviaQuestion to the ArrayListTriviaQuestions
                 TriviaQuestion currentTriviaQuestion = new TriviaQuestion(category, difficulty, type, question, correct_answer, incorrect_answers);
                 ArrayListTriviaQuestions.add(currentTriviaQuestion);
+
             }
             catch (JSONException e) {
                 String message = e.getMessage();
                 activity.gotTriviaError(message);
             }
         }
+        Log.d("hoe lang is de arraylist", "onResponse: " + ArrayListTriviaQuestions.size());
+
         activity.gotTrivia(ArrayListTriviaQuestions);
     }
 }

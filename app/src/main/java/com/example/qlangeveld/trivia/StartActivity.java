@@ -3,11 +3,13 @@ package com.example.qlangeveld.trivia;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -17,7 +19,7 @@ public class StartActivity extends AppCompatActivity implements TriviaRequest.Ca
 
     private String amountOfQuestions = "10";
     private String difficulty;
-    private String Type;
+    private String Type = "multiple";
     private TriviaRequest triviaRequest;
     private ArrayList<TriviaQuestion> ArrayListTriviaQuestions;
 
@@ -34,6 +36,8 @@ public class StartActivity extends AppCompatActivity implements TriviaRequest.Ca
     public void gotTrivia(ArrayList<TriviaQuestion> triviaQuestions) {
         this.ArrayListTriviaQuestions = triviaQuestions;
 
+        Log.d("en hoe lang is de arraylist nu", "gotTrivia: " + ArrayListTriviaQuestions.size());
+
         Intent intent = new Intent(StartActivity.this, TriviaActivity.class);
         intent.putExtra("TriviaQuestions", ArrayListTriviaQuestions);
         startActivity(intent);
@@ -43,6 +47,7 @@ public class StartActivity extends AppCompatActivity implements TriviaRequest.Ca
     public void gotTriviaError(String message) {
 
     }
+
 
     public void onDifficultyClicked(View view) {
         boolean checked = ((RadioButton) view).isChecked();
@@ -132,7 +137,7 @@ public class StartActivity extends AppCompatActivity implements TriviaRequest.Ca
         triviaRequest = new TriviaRequest(this);
         triviaRequest.getTrivia(this, finalUrl);
 
-
+        Toast.makeText(this, "Loading...", Toast.LENGTH_LONG).show();
     }
 
 }

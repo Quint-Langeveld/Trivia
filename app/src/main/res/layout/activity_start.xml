@@ -131,7 +131,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onTypeClicked"
-            android:text="True or False" />
+            android:text="True or False"
+            android:visibility="invisible" />
     </RadioGroup>
 
     <TextView
