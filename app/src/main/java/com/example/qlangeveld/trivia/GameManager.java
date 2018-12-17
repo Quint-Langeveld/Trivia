@@ -11,6 +11,7 @@ public class GameManager implements Serializable {
     private TriviaQuestion currentTriviaQuestion;
     private int Counter;
     private ArrayList<String> answers = new ArrayList<>();
+    private int score;
 
     public GameManager(ArrayList<TriviaQuestion> arrayListTriviaQuestions) {
         ArrayListTriviaQuestions = arrayListTriviaQuestions;
@@ -22,14 +23,37 @@ public class GameManager implements Serializable {
         return Counter;
     }
 
+    public Boolean isNextQuestPossible() {
+        if (Counter == ArrayListTriviaQuestions.size()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public TriviaQuestion getNextQuestion() {
         currentTriviaQuestion = ArrayListTriviaQuestions.get(Counter);
         Counter++;
         return currentTriviaQuestion;
+
     }
 
     public void putAnswer(String answer) {
         Log.d("answer", "putAnswer: " + answer);
         answers.add(answer);
+
+        if (answer.equals(currentTriviaQuestion.getCorrect_answer())) {
+            if (currentTriviaQuestion.getDifficulty().equals("easy")) {
+                score += 1;
+            } else if (currentTriviaQuestion.getDifficulty().equals("medium")) {
+                    score += 2;
+            } else if (currentTriviaQuestion.getDifficulty().equals("hard")) {
+                score += 3;
+            }
+        }
+    }
+
+    public int getHighScore() {
+        return score;
     }
 }

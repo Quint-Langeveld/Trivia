@@ -60,7 +60,6 @@ public class TriviaRequest implements Response.Listener<JSONObject>, Response.Er
             activity.gotTriviaError(message);
         }
 
-        Log.d("hoeveel JSONArrays", "onResponse: " + JSONArrayQuestions.length());
 
         for (int i=0; i < JSONArrayQuestions.length(); i++) {
             JSONObject newTriviaQuestion;
@@ -102,7 +101,6 @@ public class TriviaRequest implements Response.Listener<JSONObject>, Response.Er
                 activity.gotTriviaError(message);
             }
         }
-        Log.d("hoe lang is de arraylist", "onResponse: " + ArrayListTriviaQuestions.size());
 
         activity.gotTrivia(ArrayListTriviaQuestions);
     }

@@ -16,6 +16,7 @@ public class TriviaActivity extends AppCompatActivity {
     private GameManager gameManager;
     public TriviaQuestion currentTriviaQuestion;
     private String clickedAnswer;
+    private String UserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +25,7 @@ public class TriviaActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         ArrayListTriviaQuestions = (ArrayList<TriviaQuestion>) intent.getSerializableExtra("TriviaQuestions");
-        Log.d("begin van de TriviaActivity", "onCreate: " + ArrayListTriviaQuestions.size());
-
+        UserName = (String) intent.getSerializableExtra("UserName");
         gameManager = new GameManager(ArrayListTriviaQuestions);
 
         checkQuestion();
@@ -33,6 +33,7 @@ public class TriviaActivity extends AppCompatActivity {
 
 
     private void checkQuestion() {
+
         currentTriviaQuestion = gameManager.getNextQuestion();
 
         TextView Nr = findViewById(R.id.textViewQuestion);
@@ -136,23 +137,45 @@ public class TriviaActivity extends AppCompatActivity {
 
 
     public void onNextClicked(View view) {
-        if (clickedAnswer.isEmpty()) {
-            gameManager.putAnswer("none given");
-            checkQuestion();
+        // when no questions are left
+        if (gameManager.isNextQuestPossible()) {
+
+            if (clickedAnswer.isEmpty()) {
+                gameManager.putAnswer("none given");
+            } else {
+                gameManager.putAnswer(clickedAnswer);
+            }
+
+            // hier een put request naar de server!!!!
+
+            int highScore = gameManager.getHighScore();
+            Intent intent = new Intent(TriviaActivity.this, HighScoreActivity.class);
+            intent.putExtra("name", UserName);
+            intent.putExtra("score", highScore);
+
+            startActivity(intent);
+            finish();
+
         } else {
-            gameManager.putAnswer(clickedAnswer);
-            checkQuestion();
+
+            if (clickedAnswer.isEmpty()) {
+                gameManager.putAnswer("none given");
+                checkQuestion();
+            } else {
+                gameManager.putAnswer(clickedAnswer);
+                checkQuestion();
+            }
+
+            RadioButton buttonA = findViewById(R.id.radioButtonA);
+            RadioButton buttonB = findViewById(R.id.radioButtonB);
+            RadioButton buttonC = findViewById(R.id.radioButtonC);
+            RadioButton buttonD = findViewById(R.id.radioButtonD);
+
+            buttonA.setChecked(false);
+            buttonB.setChecked(false);
+            buttonC.setChecked(false);
+            buttonD.setChecked(false);
+
         }
-
-        RadioButton buttonA = findViewById(R.id.radioButtonA);
-        RadioButton buttonB = findViewById(R.id.radioButtonB);
-        RadioButton buttonC = findViewById(R.id.radioButtonC);
-        RadioButton buttonD = findViewById(R.id.radioButtonD);
-
-        buttonA.setChecked(false);
-        buttonB.setChecked(false);
-        buttonC.setChecked(false);
-        buttonD.setChecked(false);
     }
-
 }

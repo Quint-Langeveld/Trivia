@@ -22,6 +22,7 @@ public class StartActivity extends AppCompatActivity implements TriviaRequest.Ca
     private String Type = "multiple";
     private TriviaRequest triviaRequest;
     private ArrayList<TriviaQuestion> ArrayListTriviaQuestions;
+    private String UserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +37,11 @@ public class StartActivity extends AppCompatActivity implements TriviaRequest.Ca
     public void gotTrivia(ArrayList<TriviaQuestion> triviaQuestions) {
         this.ArrayListTriviaQuestions = triviaQuestions;
 
-        Log.d("en hoe lang is de arraylist nu", "gotTrivia: " + ArrayListTriviaQuestions.size());
 
         Intent intent = new Intent(StartActivity.this, TriviaActivity.class);
         intent.putExtra("TriviaQuestions", ArrayListTriviaQuestions);
+        intent.putExtra("UserName", UserName);
+
         startActivity(intent);
     }
 
@@ -50,6 +52,8 @@ public class StartActivity extends AppCompatActivity implements TriviaRequest.Ca
 
 
     public void onDifficultyClicked(View view) {
+        Log.d("haaaai", "onDifficultyClicked: ");
+
         boolean checked = ((RadioButton) view).isChecked();
 
         switch(view.getId()) {
@@ -116,6 +120,9 @@ public class StartActivity extends AppCompatActivity implements TriviaRequest.Ca
 
 
     public void onStartClicked(View view) {
+        TextView Name = findViewById(R.id.name);
+        UserName = Name.getText().toString();
+
         String url = "https://opentdb.com/api.php?";
         String finalUrl = url;
 
