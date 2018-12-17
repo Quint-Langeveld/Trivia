@@ -8,9 +8,15 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
-public class TriviaActivity extends AppCompatActivity {
+public class TriviaActivity extends AppCompatActivity implements HighScorePutRequest.Callback {
 
     private ArrayList<TriviaQuestion> ArrayListTriviaQuestions;
     private GameManager gameManager;
@@ -146,9 +152,33 @@ public class TriviaActivity extends AppCompatActivity {
                 gameManager.putAnswer(clickedAnswer);
             }
 
-            // hier een put request naar de server!!!!
-
             int highScore = gameManager.getHighScore();
+
+
+
+            // hier een put request naar de server!!!!
+            HighScorePutRequest highScorePutRequest = new HighScorePutRequest(this);
+
+            JSONObject newHighScore = new JSONObject();
+
+            try{
+                newHighScore.put("name", UserName);
+                newHighScore.put("score", highScore);
+            }
+            catch (JSONException e) {
+                String message = e.getMessage();
+                Log.d("message", "onNextClicked: " + message);
+            }
+
+
+            highScorePutRequest.getPutHighScore(this, newHighScore);
+
+
+
+
+
+
+            Log.d("wat is de score", "onNextClicked: " + highScore);
             Intent intent = new Intent(TriviaActivity.this, HighScoreActivity.class);
             intent.putExtra("name", UserName);
             intent.putExtra("score", highScore);
@@ -177,5 +207,16 @@ public class TriviaActivity extends AppCompatActivity {
             buttonD.setChecked(false);
 
         }
+    }
+
+
+    @Override
+    public void gotPutHighScore(ArrayList<HighScore> HighScores) {
+
+    }
+
+    @Override
+    public void gotPutHighScoreError(String message) {
+
     }
 }

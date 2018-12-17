@@ -21,7 +21,7 @@ public class HighScoreRequest implements Response.Listener<JSONArray>, Response.
 
     private Context myContext;
     private Callback activity;
-    private ArrayList<HighScore> ArrayListHighScores;
+    private ArrayList<HighScore> ArrayListHighScores = new ArrayList<>();
 
 
     public interface Callback {
@@ -42,9 +42,7 @@ public class HighScoreRequest implements Response.Listener<JSONArray>, Response.
         RequestQueue queue = Volley.newRequestQueue(myContext);
         String url = "http://ide50-quintlang.cs50.io:8080/list";
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url,  this, this);
-
-//        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,this, this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, this, this);
 
         queue.add(jsonArrayRequest);
     }
@@ -59,9 +57,9 @@ public class HighScoreRequest implements Response.Listener<JSONArray>, Response.
 
     @Override
     public void onResponse(JSONArray response) {
-        JSONArray JSONOArrayScores = response;
+        Log.d("in de OnResponse", "onResponse: ");
 
-        for (int i=0; i<JSONOArrayScores.length(); i++) {
+        for (int i=0; i<response.length(); i++) {
             JSONObject newHighScore;
             String name;
             int score;
@@ -69,7 +67,9 @@ public class HighScoreRequest implements Response.Listener<JSONArray>, Response.
             try {
                 newHighScore = response.getJSONObject(i);
                 name = newHighScore.getString("name");
+                Log.d(name, "onResponse: " + name);
                 score = newHighScore.getInt("score");
+                Log.d("score", "onResponse: " + score);
 
                 // add a new HighScores to the ArrayListHighScores
                 HighScore currentHighScore = new HighScore(name, score);

@@ -49,9 +49,17 @@ public class HighScoreActivity extends AppCompatActivity implements HighScoreReq
         player2.setText(highScore2.getName());
         player3.setText(highScore3.getName());
 
-        score1.setText(highScore1.getScore());
-        score2.setText(highScore2.getScore());
-        score3.setText(highScore3.getScore());
+        int scoreEEN = highScore1.getScore();
+        int scoreTWEE = highScore2.getScore();
+        int scoreDRIE = highScore3.getScore();
+
+        String ScoreEEN = Integer.toString(scoreEEN);
+        String ScoreTWEE = Integer.toString(scoreTWEE);
+        String SCoreDRIE = Integer.toString(scoreDRIE);
+
+        score1.setText(ScoreEEN);
+        score2.setText(ScoreTWEE);
+        score3.setText(SCoreDRIE);
     }
 
 
